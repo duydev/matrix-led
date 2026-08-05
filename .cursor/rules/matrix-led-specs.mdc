@@ -1,0 +1,14 @@
+---
+description: When editing docs/specs — keep SSOT and versions consistent
+globs: docs/specs/**/*
+alwaysApply: false
+---
+
+# Spec editing
+
+- `05` is SSOT for `DisplayConfig`. Other docs reference; do not fork schema.
+- Behavior change → update `06` AC and `13` TCs and bump file Version.
+- Delivery/order change → update `15`.
+- Test tooling change → update `11`/`14` + ADR-007 in `08`.
+- Keep MUST/SHOULD/MAY vocabulary consistent with README.
+- Prefer Vietnamese product copy; keep technical ids in English (`effectId`, AC-xx).

@@ -1,0 +1,17 @@
+---
+description: LED engine — framebuffer, effects, font raster, no DOM
+globs: src/engine/**/*
+alwaysApply: false
+---
+
+# Engine rules
+
+- Effects write **intensity 0..1** only; color/rainbow/glow live in `colorize` / renderer — not effect files.
+- Reuse `Float32Array` buffers; no allocate-per-frame.
+- `TextBitmap` column-major: `index = x * height + y`.
+- Registry pattern: `createEffect(id)`; UI lists registered ids only.
+- Switching: text / effectId / matrixSizeId / direction → dispose → rebuild bitmap if needed → init → `t = 0`. Color/speed/glow → do not reset `t`.
+- Flatten `\n` before raster. Threshold default `> 128` (tune 100–160). Missing glyph → `?`.
+- MUST NOT import React components or read DOM from effects.
+- Direction convention (`04`): rtl/ltr/ttb/btt as scroll content movement.
+- Unit-test pure math (marquee/fade/blink/flatten) per `14`.

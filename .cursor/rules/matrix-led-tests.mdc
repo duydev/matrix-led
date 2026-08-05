@@ -1,0 +1,14 @@
+---
+description: Vitest/Playwright conventions for Matrix LED
+globs: "**/*.{test,spec}.{ts,tsx}"
+alwaysApply: false
+---
+
+# Tests
+
+- Framework: Vitest unit MUST; Playwright smoke SHOULD (`14`).
+- Automate deterministic logic only: persist validate, flatten, effect `t` fixtures, hex parse.
+- MUST NOT gate CI on full-canvas pixel diffs / screenshots of LED grid.
+- E2E: assert DOM/network (no Google Fonts CDN), not pixel patterns.
+- Co-locate `*.test.ts` next to source when possible.
+- Map cases to TC/AC ids in `13` / `06` when adding suites.

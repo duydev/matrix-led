@@ -1,0 +1,31 @@
+---
+description: Matrix LED core — spec SSOT, scope, DoD, forbidden shortcuts
+alwaysApply: true
+---
+
+# Matrix LED — Core
+
+## Spec SSOT (read before coding)
+
+- Scope/non-goals: `docs/specs/00-product-overview.md`
+- Requirements: `docs/specs/01-srs.md`
+- Architecture: `docs/specs/02-architecture.md`
+- Schema: **`docs/specs/05-data-model.md` only**
+- Effects: `docs/specs/04-effects-engine.md`
+- DoD/AC: `docs/specs/06-acceptance-criteria.md`
+- Tasks: **`docs/specs/15-project-backlog.md`**
+- Impl notes: `docs/specs/10-impl-notes.md`
+
+## Hard rules
+
+- Implement **one milestone** from `15` at a time (M1→M2→…). No big-bang MVP.
+- MUST NOT: backend, CDN Google Fonts, CSS marquee-as-engine, `fillText` as sole LED display, WebGL unless ADR, zoom-% slider, phase-2 effects.
+- UI labels: Vietnamese (`03`). Default text has diacritics.
+- Font: VT323 via `@fontsource` (latin + latin-ext + vietnamese) or `public/fonts`. Await `document.fonts.ready`.
+- Schema fields: only shapes in `05`. Do not invent parallel config types in `02`.
+- Before claim done: `npm test` + `npm run build` + map AC for the milestone.
+
+## Git
+
+- Feature work on `feature/*` only (see skill `gitflow-feature` / `docs/workflows/gitflow-feature.md`).
+- Commit only when user asks. No force-push `main`/`develop`.

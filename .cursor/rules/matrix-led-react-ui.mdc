@@ -1,0 +1,15 @@
+---
+description: React UI + RAF loop footguns for DisplayStage
+globs: src/ui/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# UI + RAF
+
+- RAF in `useEffect` on DisplayStage / `useEngineLoop`. **No `setState` inside the frame tick.**
+- Read config via `configRef.current` each frame.
+- Cleanup: `cancelAnimationFrame` + `effect.dispose?()`; Strict Mode safe (idempotent).
+- Reinit effects in a separate effect when text/effectId/size/direction change — not inside `tick`.
+- Prefer `data-testid` from `14` §7: `display-stage`, `text-input`, `effect-select`, `play-pause`, `fullscreen-btn`, `speed-slider`.
+- Labels Vietnamese; touch targets ≥ 44px.
+- Fullscreen target = DisplayStage; always implement pseudo-fullscreen fallback.
