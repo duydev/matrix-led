@@ -7,6 +7,8 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-08-06
+
 ### Added
 
 - Footer web app: phiên bản (`package.json`), tác giả Trần Nhật Duy, email, GitHub, MIT
@@ -15,12 +17,12 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/).
 - Phạm vi tốc độ mở rộng: `0.25`–`10` (marquee / typewriter nhanh hơn theo scale)
 - Dev / preview Vite bind `host: true` để truy cập LAN
 - Pseudo-fullscreen thân thiện iOS Safari (portal `document.body`, `visualViewport`, khóa scroll)
-- Thoát fullscreen bằng double-click / double-tap (không nút Exit trên overlay)
+- Open-source kit: README, LICENSE (MIT), CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, GitHub issue/PR templates
 - Ngưỡng coverage Vitest 100% trên `src/` + báo cáo QC
 
 ### Changed
 
-- Fullscreen chỉ còn gesture: double-click / double-tap trên màn LED để **toggle** (bỏ nút Toàn màn hình)
+- Fullscreen chỉ còn gesture: double-click / double-tap trên màn LED để **toggle** (bỏ nút Toàn màn hình); Esc / phím F vẫn hỗ trợ
 - Default config: `fontId: space_mono`, `matrixSizeId: 256x64`, `speed: 4`
 - Font raster supersample (`RASTER_SCALE = 6`) để giảm hiện tượng “dính dấu” / stem chữ M
 - Tài liệu SSOT cập nhật theo font / size / speed / fullscreen
@@ -49,5 +51,6 @@ Release MVP đầu tiên (tag `v0.1.0`).
 
 ---
 
-[Unreleased]: https://github.com/duydev/matrix-led/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/duydev/matrix-led/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/duydev/matrix-led/releases/tag/v0.2.0
 [0.1.0]: https://github.com/duydev/matrix-led/releases/tag/v0.1.0

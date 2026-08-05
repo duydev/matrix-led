@@ -66,7 +66,7 @@ describe('UI controls', () => {
     const { rerender } = render(
       <StyleControls config={DEFAULT_CONFIG} onPatch={onPatch} />,
     );
-    const panel = screen.getByText('Style').closest('.panel')!;
+    const panel = screen.getByText('Style').closest('.panel') as HTMLElement;
     await user.click(within(panel).getByRole('button', { name: 'Hổ phách' }));
     await user.click(within(panel).getByRole('button', { name: 'Rainbow' }));
     await user.click(within(panel).getByRole('button', { name: 'Custom' }));

@@ -97,7 +97,7 @@ function createMock2dContext(): CanvasRenderingContext2D {
       actualBoundingBoxAscent: 28,
       actualBoundingBoxDescent: 4,
     })),
-    getImageData: vi.fn((sx: number, sy: number, sw: number, sh: number) => {
+    getImageData: vi.fn((_sx: number, _sy: number, sw: number, sh: number) => {
       const data = new Uint8ClampedArray(sw * sh * 4);
       // light a diagonal so raster find lit pixels
       for (let y = 0; y < sh; y += 1) {

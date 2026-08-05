@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  clampText,
   loadConfig,
   saveConfig,
   validateConfig,

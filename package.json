@@ -1,7 +1,7 @@
 {
   "name": "matrix-led",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Client-only Matrix LED simulator — text, effects, fonts, and fullscreen demo on Canvas 2D",
   "license": "MIT",
   "author": {
