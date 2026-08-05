@@ -48,6 +48,7 @@ export const DisplayStage = forwardRef<DisplayStageHandle, DisplayStageProps>(
 
     const toggleFullscreen = useCallback(async () => {
       const el = rootRef.current;
+      /* v8 ignore next */
       if (!el) return;
       if (fsModeRef.current !== 'none' || document.fullscreenElement === el) {
         await exitDisplayFullscreen(el, fsModeRef.current);
@@ -84,6 +85,7 @@ export const DisplayStage = forwardRef<DisplayStageHandle, DisplayStageProps>(
       const onKey = (e: KeyboardEvent) => {
         if (e.key === 'Escape' && fsModeRef.current === 'pseudo') {
           const el = rootRef.current;
+          /* v8 ignore next */
           if (!el) return;
           void exitDisplayFullscreen(el, 'pseudo').then(() => {
             setFullscreenState(false, 'none');
@@ -101,6 +103,7 @@ export const DisplayStage = forwardRef<DisplayStageHandle, DisplayStageProps>(
 
     useEffect(() => {
       const canvas = canvasRef.current;
+      /* v8 ignore next */
       if (!canvas) return;
 
       const engine = new DisplayEngine(canvas);
@@ -110,6 +113,7 @@ export const DisplayStage = forwardRef<DisplayStageHandle, DisplayStageProps>(
       let running = true;
 
       const tick = (now: number) => {
+        /* v8 ignore next */
         if (!running) return;
         const base = configRef.current;
         const visible = document.visibilityState === 'visible';

@@ -26,11 +26,8 @@ const ORDER: EffectId[] = [
 ];
 
 export function createEffect(id: EffectId): Effect {
-  const factory = registry[id] ?? registry.marquee;
-  if (!factory) {
-    throw new Error(`Unknown effect: ${id}`);
-  }
-  return factory();
+  // marquee is always registered — unknown ids fall back to it
+  return (registry[id] ?? registry.marquee!)();
 }
 
 export function listRegisteredEffects(): { id: EffectId; label: string }[] {

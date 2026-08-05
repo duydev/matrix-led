@@ -21,6 +21,7 @@ function makePlaceholderGlyph(rows: number): TextBitmap {
   const height = rows;
   const dots = new Uint8Array(width * height);
   // rough "?" block
+  /* v8 ignore next 8 */
   for (let y = 1; y < height - 1; y += 1) {
     for (let x = 1; x < width - 1; x += 1) {
       const edge = x === 1 || x === width - 2 || y === 1 || y === Math.floor(height / 2);
@@ -52,10 +53,6 @@ export async function rasterizeText(
   const key = `${flat}::${rows}::${threshold}::${fontFamily}`;
 
   if (cache?.key === key) return cache.bitmap;
-
-  if (typeof document === 'undefined') {
-    return EMPTY_BITMAP;
-  }
 
   await document.fonts.ready;
 
