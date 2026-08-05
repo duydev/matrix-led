@@ -101,7 +101,8 @@ Trong yêu cầu gốc, **“zoom lên toàn màn hình”** được chốt ngh
 |-------|----------|
 | Font | Self-host VT323 (hoặc font pixel OFL có Vietnamese); offscreen + threshold mặc định `> 128` (tune 100–160); glyph thiếu → `?`. Packaging: `@fontsource/vt323` **hoặc** `public/fonts/*.woff2` — không CDN runtime |
 | Color | HEX + brightness; native color input |
-| Matrix sizes | `32x8`, `64x16` (default), `96x16` |
+| Matrix sizes | `32x8`, `64x16`, `96x16`, `128x32`, `160x32`, `192x48`, `256x64` (default) |
+| Fonts (mono LED) | `vt323` (VI), `share_tech_mono`, `ibm_plex_mono` (VI), `space_mono` (default, VI), `silkscreen`, `press_start_2p`, `nova_mono` — self-host `@fontsource`, không CDN |
 | Config schema | SSOT = `05-data-model.md` |
 | Short text | Marquee vẫn chạy vào/ra được; `static` là effect riêng |
 | Newlines | MVP flatten `\n` → khoảng trắng |

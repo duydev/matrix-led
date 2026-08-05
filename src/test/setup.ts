@@ -14,6 +14,23 @@ if (!document.fonts) {
   });
 }
 
+if (typeof window.matchMedia !== 'function') {
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    writable: true,
+    value: (query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: () => undefined,
+      removeListener: () => undefined,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+      dispatchEvent: () => false,
+    }),
+  });
+}
+
 function createMock2dContext(): CanvasRenderingContext2D {
   const store = {
     fillStyle: '#000',
@@ -75,7 +92,11 @@ function createMock2dContext(): CanvasRenderingContext2D {
     fill: vi.fn(),
     roundRect: vi.fn(),
     fillText: vi.fn(),
-    measureText: vi.fn((text: string) => ({ width: Math.max(1, text.length * 6) })),
+    measureText: vi.fn((text: string) => ({
+      width: Math.max(1, text.length * 24),
+      actualBoundingBoxAscent: 28,
+      actualBoundingBoxDescent: 4,
+    })),
     getImageData: vi.fn((sx: number, sy: number, sw: number, sh: number) => {
       const data = new Uint8ClampedArray(sw * sh * 4);
       // light a diagonal so raster find lit pixels

@@ -56,7 +56,7 @@
 | ID | Priority | Requirement |
 |----|----------|-------------|
 | FR-40 | MUST | Play / Pause. |
-| FR-41 | MUST | Speed multiplier `0.25..3`. |
+| FR-41 | MUST | Speed multiplier `0.25..10`. |
 | FR-42 | SHOULD | Reset animation về đầu chu kỳ (`t = 0`, re-init effect hiện tại). |
 | FR-43 | MAY | Nút reverse direction riêng (MVP dùng select `direction`). |
 

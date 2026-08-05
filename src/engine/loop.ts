@@ -10,6 +10,7 @@ import {
 import { EMPTY_BITMAP, type TextBitmap } from './font/textBitmap';
 import { rasterizeText, DEFAULT_ALPHA_THRESHOLD } from './font/rasterizeText';
 import { drawFrame } from './renderer';
+import { resolveFontFamily } from '../state/fonts';
 
 export type EngineHandles = {
   configRef: { current: DisplayConfig };
@@ -49,6 +50,7 @@ export class DisplayEngine {
       config.effectId,
       config.matrixSizeId,
       config.direction,
+      config.fontId,
     ].join('|');
     const keyChanged = nextKey !== this.syncKey;
     const effectChanged = this.effect.id !== config.effectId || forceEffectReset;
@@ -62,6 +64,7 @@ export class DisplayEngine {
     const bitmap = await rasterizeText(config.text, {
       rows: size.rows,
       threshold: DEFAULT_ALPHA_THRESHOLD,
+      fontFamily: resolveFontFamily(config.fontId),
     });
     if (this.disposed || gen !== this.rasterGen) return;
 

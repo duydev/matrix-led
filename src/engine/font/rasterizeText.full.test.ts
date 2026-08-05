@@ -47,20 +47,52 @@ describe('rasterizeText', () => {
       () =>
         ({
           font: '',
-          textBaseline: 'top',
+          textBaseline: 'alphabetic',
           textAlign: 'left',
           fillStyle: '',
-          measureText: () => ({ width: 10 }),
+          measureText: () => ({
+            width: 40,
+            actualBoundingBoxAscent: 28,
+            actualBoundingBoxDescent: 4,
+          }),
           clearRect: vi.fn(),
           fillText: vi.fn(),
           getImageData: () => ({
             data: new Uint8ClampedArray(0),
-            width: 10,
-            height: 8,
+            width: 40,
+            height: 32,
           }),
         }) as unknown as CanvasRenderingContext2D,
     );
     const bitmap = await rasterizeText('?', { rows: 8 });
     expect(bitmap.width).toBeGreaterThan(0);
+  });
+
+  it('falls back when text metrics omit bounding boxes', async () => {
+    clearRasterCache();
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(
+      () =>
+        ({
+          font: '',
+          textBaseline: 'alphabetic',
+          textAlign: 'left',
+          fillStyle: '',
+          measureText: () => ({
+            width: 20,
+            actualBoundingBoxAscent: Number.NaN,
+            // descent omitted → fallback branch
+          }),
+          clearRect: vi.fn(),
+          fillText: vi.fn(),
+          getImageData: (_sx: number, _sy: number, sw: number, sh: number) => {
+            const data = new Uint8ClampedArray(sw * sh * 4);
+            for (let i = 3; i < data.length; i += 4) data[i] = 255;
+            return { data, width: sw, height: sh };
+          },
+        }) as unknown as CanvasRenderingContext2D,
+    );
+    const bitmap = await rasterizeText('M', { rows: 8 });
+    expect(bitmap.height).toBe(8);
+    expect(Math.max(...bitmap.dots)).toBe(1);
   });
 });

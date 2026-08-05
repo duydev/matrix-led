@@ -33,7 +33,7 @@ describe('persist extras', () => {
     expect(cfg.effectId).toBe('blink');
     expect(cfg.presetId).toBe('classic_red');
     expect(cfg.direction).toBe('rtl');
-    expect(cfg.matrixSizeId).toBe('64x16');
+    expect(cfg.matrixSizeId).toBe('256x64');
     expect(cfg.cellShape).toBe('circle');
     expect(cfg.glow).toBe(DEFAULT_CONFIG.glow);
     expect(cfg.playing).toBe(DEFAULT_CONFIG.playing);
@@ -55,6 +55,18 @@ describe('persist extras', () => {
         color: '#112233',
       }).color,
     ).toBe('#112233');
+    expect(
+      validateConfig({
+        ...DEFAULT_CONFIG,
+        fontId: 'space_mono',
+      }).fontId,
+    ).toBe('space_mono');
+    expect(
+      validateConfig({
+        ...DEFAULT_CONFIG,
+        fontId: 'nope' as never,
+      }).fontId,
+    ).toBe('space_mono');
   });
 
   it('loads defaults, saved json, and corrupt storage', () => {

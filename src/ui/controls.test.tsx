@@ -70,7 +70,9 @@ describe('UI controls', () => {
   it('StyleControls patches presets and fields', async () => {
     const user = userEvent.setup();
     const onPatch = vi.fn();
-    render(<StyleControls config={DEFAULT_CONFIG} onPatch={onPatch} />);
+    const { rerender } = render(
+      <StyleControls config={DEFAULT_CONFIG} onPatch={onPatch} />,
+    );
     const panel = screen.getByText('Style').closest('.panel')!;
     await user.click(within(panel).getByRole('button', { name: 'Hổ phách' }));
     await user.click(within(panel).getByRole('button', { name: 'Rainbow' }));
@@ -82,7 +84,16 @@ describe('UI controls', () => {
       target: { value: '#abcdef' },
     });
     await user.selectOptions(screen.getByLabelText('Hướng'), 'ltr');
-    await user.selectOptions(screen.getByLabelText('Kích thước matrix'), '32x8');
+    await user.selectOptions(screen.getByLabelText('Kích thước matrix'), '256x64');
+    await user.selectOptions(screen.getByTestId('font-select'), 'ibm_plex_mono');
+    expect(onPatch).toHaveBeenCalledWith({ fontId: 'ibm_plex_mono' });
+    rerender(
+      <StyleControls
+        config={{ ...DEFAULT_CONFIG, fontId: 'silkscreen' }}
+        onPatch={onPatch}
+      />,
+    );
+    expect(screen.getByText(/thiếu subset tiếng Việt/i)).toBeInTheDocument();
     await user.click(screen.getByLabelText('Ánh sáng LED'));
     expect(onPatch).toHaveBeenCalled();
   });

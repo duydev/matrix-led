@@ -24,13 +24,19 @@ describe('validateConfig', () => {
   });
 
   it('clamps brightness and speed', () => {
-    const cfg = validateConfig({
+    const low = validateConfig({
       ...DEFAULT_CONFIG,
       brightness: 99,
       speed: 0.01,
     });
-    expect(cfg.brightness).toBe(1);
-    expect(cfg.speed).toBe(0.25);
+    expect(low.brightness).toBe(1);
+    expect(low.speed).toBe(0.25);
+
+    const high = validateConfig({
+      ...DEFAULT_CONFIG,
+      speed: 99,
+    });
+    expect(high.speed).toBe(10);
   });
 
   it('slices oversized text', () => {

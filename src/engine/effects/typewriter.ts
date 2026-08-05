@@ -2,7 +2,7 @@ import { clearFrameBuffer, type FrameBuffer } from '../framebuffer';
 import { paintCentered } from './compose';
 import type { Effect, EffectContext, EffectFactory } from './types';
 
-const COLS_PER_SEC = 12;
+const COLS_PER_SEC = 20;
 const HOLD_MS = 1000;
 
 export function typewriterVisibleColumns(

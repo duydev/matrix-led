@@ -257,7 +257,62 @@ select {
   position: relative;
 }
 
-.display-stage.is-pseudo-fullscreen,
+.display-stage__viewport {
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+html.is-fs-scroll-lock {
+  overflow: hidden !important;
+  height: 100%;
+}
+
+body.is-fs-scroll-lock {
+  overflow: hidden !important;
+  touch-action: none;
+  overscroll-behavior: none;
+  /* position/top set in JS for iOS scroll restore */
+}
+
+/*
+ * Pseudo fullscreen — iOS Safari cannot use Element Fullscreen.
+ * Stage is re-parented under <body>; sizes come from visualViewport (--fs-*).
+ */
+.display-stage.is-pseudo-fullscreen {
+  position: fixed !important;
+  top: var(--fs-top, 0px) !important;
+  left: var(--fs-left, 0px) !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: var(--fs-w, 100%) !important;
+  height: var(--fs-h, 100%) !important;
+  max-width: none !important;
+  max-height: none !important;
+  z-index: 2147483000 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.display-stage.is-pseudo-fullscreen .display-stage__viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .display-stage:fullscreen {
   position: fixed;
   inset: 0;
@@ -267,22 +322,43 @@ select {
   margin: 0;
   border-radius: 0;
   background: #000;
-  display: grid;
-  place-items: center;
-  padding: 24px;
+  display: block;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.display-stage:fullscreen .display-stage__viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 0;
 }
 
 .display-stage.is-pseudo-fullscreen .display-stage__bezel,
 .display-stage:fullscreen .display-stage__bezel {
-  width: min(96vw, 1400px);
-  max-height: 80vh;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  border-radius: 0;
+  border: none;
 }
 
-.display-stage__exit {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 2;
+.display-stage.is-pseudo-fullscreen .display-stage__canvas,
+.display-stage:fullscreen .display-stage__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.display-stage.is-fullscreen-active {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 @media (min-width: 768px) {

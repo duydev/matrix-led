@@ -30,7 +30,23 @@ export type PresetId =
 
 export type Direction = 'rtl' | 'ltr' | 'ttb' | 'btt';
 
-export type MatrixSizeId = '32x8' | '64x16' | '96x16';
+export type MatrixSizeId =
+  | '32x8'
+  | '64x16'
+  | '96x16'
+  | '128x32'
+  | '160x32'
+  | '192x48'
+  | '256x64';
+
+export type FontId =
+  | 'vt323'
+  | 'share_tech_mono'
+  | 'ibm_plex_mono'
+  | 'space_mono'
+  | 'silkscreen'
+  | 'press_start_2p'
+  | 'nova_mono';
 
 export interface DisplayConfig {
   version: 1;
@@ -40,9 +56,10 @@ export interface DisplayConfig {
   color: string;           // #RRGGBB
   backgroundColor: string; // #RRGGBB
   brightness: number;      // 0.1 .. 1
-  speed: number;           // 0.25 .. 3
+  speed: number;           // SPEED_MIN .. SPEED_MAX (0.25 .. 10)
   direction: Direction;
   matrixSizeId: MatrixSizeId;
+  fontId: FontId;
   cellShape: 'circle' | 'square';
   glow: boolean;
   playing: boolean;
@@ -56,6 +73,10 @@ export const MATRIX_SIZES: Record<MatrixSizeId, { cols: number; rows: number }> 
   '32x8': { cols: 32, rows: 8 },
   '64x16': { cols: 64, rows: 16 },
   '96x16': { cols: 96, rows: 16 },
+  '128x32': { cols: 128, rows: 32 },
+  '160x32': { cols: 160, rows: 32 },
+  '192x48': { cols: 192, rows: 48 },
+  '256x64': { cols: 256, rows: 64 },
 };
 
 // cols/rows = MATRIX_SIZES[config.matrixSizeId]
@@ -72,9 +93,10 @@ export const DEFAULT_CONFIG: DisplayConfig = {
   color: '#ff1e00',
   backgroundColor: '#050505',
   brightness: 0.85,
-  speed: 1,
+  speed: 4,
   direction: 'rtl',
-  matrixSizeId: '64x16',
+  matrixSizeId: '256x64',
+  fontId: 'space_mono',
   cellShape: 'circle',
   glow: true,
   playing: true,
@@ -117,10 +139,11 @@ Default text **có dấu** để chứng minh AC tiếng Việt ngay từ lần 
 | `presetId` | Unknown → `classic_red` |
 | `color` / `backgroundColor` | Invalid hex → default |
 | `brightness` | clamp `[0.1, 1]` |
-| `speed` | clamp `[0.25, 3]` |
+| `speed` | clamp `[0.25, 10]` |
 | `text` | string; slice `0..MAX_TEXT_LENGTH`; flatten sẽ làm ở pipeline font |
 | `direction` | invalid → `rtl` |
-| `matrixSizeId` | invalid → `64x16` |
+| `matrixSizeId` | invalid → `256x64` |
+| `fontId` | invalid / missing → `space_mono` |
 | `playing` | coerce boolean |
 | `glow` / `cellShape` | invalid → defaults |
 

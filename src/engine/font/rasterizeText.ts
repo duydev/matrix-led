@@ -3,6 +3,9 @@ import { EMPTY_BITMAP, type TextBitmap } from './textBitmap';
 
 export const DEFAULT_ALPHA_THRESHOLD = 128;
 
+/** Offscreen supersample factor — keeps multi-stem glyphs (M/m/W) from fusing at LED resolution. */
+export const RASTER_SCALE = 6;
+
 export type RasterOptions = {
   rows: number;
   threshold?: number;
@@ -42,6 +45,53 @@ export function getAlphaBit(alpha: number, threshold = DEFAULT_ALPHA_THRESHOLD):
   return alphaToBit(alpha, threshold);
 }
 
+function metricNumber(value: number | undefined, fallback: number): number {
+  return typeof value === 'number' && Number.isFinite(value) ? Math.abs(value) : fallback;
+}
+
+/**
+ * Pool each SCALE×SCALE block into one LED bit (column-major).
+ * A cell lights when enough hi-res samples clear the alpha threshold —
+ * preserves thin stems and open valleys in multi-stem glyphs (M/m/W).
+ */
+export function downsampleAlphaGrid(
+  image: { data: ArrayLike<number>; width: number; height: number },
+  outCols: number,
+  outRows: number,
+  scale: number,
+  threshold: number,
+): { dots: Uint8Array; lit: number } {
+  const dots = new Uint8Array(outCols * outRows);
+  let lit = 0;
+  const hiW = image.width;
+  const hiH = image.height;
+  // Require roughly one full hi-res column inside the block (~25% for SCALE=4).
+  const minHits = Math.max(1, scale);
+
+  for (let x = 0; x < outCols; x += 1) {
+    for (let y = 0; y < outRows; y += 1) {
+      let hits = 0;
+      const x0 = x * scale;
+      const y0 = y * scale;
+      for (let dy = 0; dy < scale; dy += 1) {
+        for (let dx = 0; dx < scale; dx += 1) {
+          const sx = x0 + dx;
+          const sy = y0 + dy;
+          if (sx < 0 || sy < 0 || sx >= hiW || sy >= hiH) continue;
+          if ((image.data[(sy * hiW + sx) * 4 + 3] ?? 0) > threshold) {
+            hits += 1;
+          }
+        }
+      }
+      const bit: 0 | 1 = hits >= minHits ? 1 : 0;
+      dots[x * outRows + y] = bit;
+      lit += bit;
+    }
+  }
+
+  return { dots, lit };
+}
+
 export async function rasterizeText(
   text: string,
   options: RasterOptions,
@@ -50,7 +100,8 @@ export async function rasterizeText(
   const rows = Math.max(1, options.rows);
   const threshold = options.threshold ?? DEFAULT_ALPHA_THRESHOLD;
   const fontFamily = options.fontFamily ?? '"VT323", monospace';
-  const key = `${flat}::${rows}::${threshold}::${fontFamily}`;
+  const scale = RASTER_SCALE;
+  const key = `${flat}::${rows}::${threshold}::${fontFamily}::s${scale}`;
 
   if (cache?.key === key) return cache.bitmap;
 
@@ -69,38 +120,55 @@ export async function rasterizeText(
     return fallback;
   }
 
-  const fontPx = rows;
-  ctx.font = `${fontPx}px ${fontFamily}`;
-  ctx.textBaseline = 'top';
+  const hiH = rows * scale;
+  const padX = scale;
+
+  // Probe ink extent at target high-res size, then fit font so ink fills the matrix height.
+  ctx.font = `${hiH}px ${fontFamily}`;
+  ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
+  const probe = ctx.measureText(flat);
+  const probeAscent = metricNumber(probe.actualBoundingBoxAscent, hiH * 0.8);
+  const probeDescent = metricNumber(probe.actualBoundingBoxDescent, hiH * 0.2);
+  const probeInk = Math.max(1, probeAscent + probeDescent);
+  const targetInk = Math.max(scale, hiH - 2);
+  const fontPx = Math.max(scale, Math.floor(hiH * (targetInk / probeInk)));
 
+  ctx.font = `${fontPx}px ${fontFamily}`;
   const metrics = ctx.measureText(flat);
-  const width = Math.max(1, Math.ceil(metrics.width) + 2);
-  canvas.width = width;
-  canvas.height = rows;
+  const ascent = metricNumber(metrics.actualBoundingBoxAscent, fontPx * 0.8);
+  const descent = metricNumber(metrics.actualBoundingBoxDescent, fontPx * 0.2);
+  const inkH = Math.max(1, ascent + descent);
+  const advance = Math.max(1, Math.ceil(metrics.width));
+  const hiW = Math.max(scale, advance + padX * 2);
 
-  ctx.clearRect(0, 0, width, rows);
+  canvas.width = hiW;
+  canvas.height = hiH;
+
+  // Canvas resize resets state — reapply draw settings.
+  ctx.clearRect(0, 0, hiW, hiH);
   ctx.fillStyle = '#fff';
   ctx.font = `${fontPx}px ${fontFamily}`;
-  ctx.textBaseline = 'top';
-  ctx.fillText(flat, 1, 0);
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
 
-  const image = ctx.getImageData(0, 0, width, rows);
-  const dots = new Uint8Array(width * rows);
-  let lit = 0;
+  const topPad = Math.floor((hiH - inkH) / 2);
+  const baselineY = topPad + ascent;
+  ctx.fillText(flat, padX, baselineY);
 
-  for (let x = 0; x < width; x += 1) {
-    for (let y = 0; y < rows; y += 1) {
-      const alpha = image.data[(y * width + x) * 4 + 3] ?? 0;
-      const bit = alphaToBit(alpha, threshold);
-      dots[x * rows + y] = bit;
-      lit += bit;
-    }
-  }
+  const image = ctx.getImageData(0, 0, hiW, hiH);
+  const outCols = Math.max(1, Math.ceil(hiW / scale));
+  const { dots, lit } = downsampleAlphaGrid(
+    image,
+    outCols,
+    rows,
+    scale,
+    threshold,
+  );
 
   // If everything failed to light (missing glyphs), expose "?"
   const bitmap: TextBitmap =
-    lit === 0 ? makePlaceholderGlyph(rows) : { width, height: rows, dots };
+    lit === 0 ? makePlaceholderGlyph(rows) : { width: outCols, height: rows, dots };
 
   cache = { key, bitmap };
   return bitmap;

@@ -1,7 +1,10 @@
 import { PRESET_COLORS } from '../state/defaults';
+import { FONT_ORDER, LED_FONTS } from '../state/fonts';
+import { MATRIX_SIZES } from '../state/types';
 import type {
   Direction,
   DisplayConfig,
+  FontId,
   MatrixSizeId,
   PresetId,
 } from '../state/types';
@@ -95,6 +98,33 @@ export function StyleControls({ config, onPatch }: StyleControlsProps) {
         ))}
       </select>
 
+      <label className="field-label" htmlFor="font-select">
+        <span>Font LED</span>
+      </label>
+      <select
+        id="font-select"
+        className="select"
+        data-testid="font-select"
+        value={config.fontId}
+        onChange={(e) => onPatch({ fontId: e.target.value as FontId })}
+      >
+        {FONT_ORDER.map((id) => {
+          const meta = LED_FONTS[id];
+          const vi = meta.vietnamese ? '' : ' · ít dấu Việt';
+          return (
+            <option key={id} value={id}>
+              {meta.label}
+              {vi}
+            </option>
+          );
+        })}
+      </select>
+      {!LED_FONTS[config.fontId].vietnamese ? (
+        <p className="hint" role="note">
+          Font này thiếu subset tiếng Việt — dấu có thể thành “?”.
+        </p>
+      ) : null}
+
       <label className="field-label" htmlFor="size-select">
         <span>Kích thước matrix</span>
       </label>
@@ -106,9 +136,14 @@ export function StyleControls({ config, onPatch }: StyleControlsProps) {
           onPatch({ matrixSizeId: e.target.value as MatrixSizeId })
         }
       >
-        <option value="32x8">32×8</option>
-        <option value="64x16">64×16</option>
-        <option value="96x16">96×16</option>
+        {(Object.keys(MATRIX_SIZES) as MatrixSizeId[]).map((id) => {
+          const { cols, rows } = MATRIX_SIZES[id];
+          return (
+            <option key={id} value={id}>
+              {cols}×{rows}
+            </option>
+          );
+        })}
       </select>
 
       <label className="check-row">

@@ -4,7 +4,7 @@ import type { Direction } from '../../state/types';
 import type { Effect, EffectContext, EffectFactory } from './types';
 
 /** cells/sec at speed=1 */
-export const MARQUEE_BASE_SPEED = 8;
+export const MARQUEE_BASE_SPEED = 16;
 
 /**
  * direction (docs/specs/04):

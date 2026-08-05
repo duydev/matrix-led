@@ -1,3 +1,5 @@
+import { SPEED_MAX, SPEED_MIN } from '../state/types';
+
 type PlaybackControlsProps = {
   playing: boolean;
   speed: number;
@@ -53,8 +55,8 @@ export function PlaybackControls({
         id="speed-slider"
         data-testid="speed-slider"
         type="range"
-        min={0.25}
-        max={3}
+        min={SPEED_MIN}
+        max={SPEED_MAX}
         step={0.05}
         value={speed}
         onChange={(e) => onSpeedChange(Number(e.target.value))}

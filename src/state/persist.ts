@@ -1,6 +1,10 @@
 import { DEFAULT_CONFIG, PRESET_COLORS } from './defaults';
+import { LED_FONTS, type FontId } from './fonts';
 import {
   MAX_TEXT_LENGTH,
+  MATRIX_SIZES,
+  SPEED_MAX,
+  SPEED_MIN,
   STORAGE_KEY,
   type Direction,
   type DisplayConfig,
@@ -29,7 +33,11 @@ const PRESET_IDS = new Set<PresetId>([
 
 const DIRECTIONS = new Set<Direction>(['rtl', 'ltr', 'ttb', 'btt']);
 
-const MATRIX_SIZE_IDS = new Set<MatrixSizeId>(['32x8', '64x16', '96x16']);
+const MATRIX_SIZE_IDS = new Set<MatrixSizeId>(
+  Object.keys(MATRIX_SIZES) as MatrixSizeId[],
+);
+
+const FONT_IDS = new Set<FontId>(Object.keys(LED_FONTS) as FontId[]);
 
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 
@@ -71,6 +79,9 @@ export function validateConfig(input: unknown): DisplayConfig {
   const matrixSizeId = MATRIX_SIZE_IDS.has(raw.matrixSizeId as MatrixSizeId)
     ? (raw.matrixSizeId as MatrixSizeId)
     : DEFAULT_CONFIG.matrixSizeId;
+  const fontId = FONT_IDS.has(raw.fontId as FontId)
+    ? (raw.fontId as FontId)
+    : DEFAULT_CONFIG.fontId;
 
   const colorRaw = asString(raw.color, DEFAULT_CONFIG.color);
   const bgRaw = asString(raw.backgroundColor, DEFAULT_CONFIG.backgroundColor);
@@ -93,9 +104,10 @@ export function validateConfig(input: unknown): DisplayConfig {
     color,
     backgroundColor: HEX_RE.test(bgRaw) ? bgRaw : DEFAULT_CONFIG.backgroundColor,
     brightness: clamp(asNumber(raw.brightness, DEFAULT_CONFIG.brightness), 0.1, 1),
-    speed: clamp(asNumber(raw.speed, DEFAULT_CONFIG.speed), 0.25, 3),
+    speed: clamp(asNumber(raw.speed, DEFAULT_CONFIG.speed), SPEED_MIN, SPEED_MAX),
     direction,
     matrixSizeId,
+    fontId,
     cellShape,
     glow: asBoolean(raw.glow, DEFAULT_CONFIG.glow),
     playing: asBoolean(raw.playing, DEFAULT_CONFIG.playing),
