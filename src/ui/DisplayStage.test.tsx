@@ -139,6 +139,45 @@ describe('DisplayStage', () => {
     );
   });
 
+  it('enters fullscreen on double-click and double-tap', async () => {
+    const onFullscreenChange = vi.fn();
+    const { unmount } = render(
+      <DisplayStage
+        config={DEFAULT_CONFIG}
+        onFullscreenChange={onFullscreenChange}
+      />,
+    );
+    await waitFor(() => expect(syncConfig).toHaveBeenCalled());
+
+    const stage = screen.getByTestId('display-stage');
+    stage.requestFullscreen = vi.fn().mockRejectedValue(new Error('x'));
+
+    fireEvent.pointerUp(stage, { pointerType: 'touch' });
+    expect(onFullscreenChange).not.toHaveBeenCalled();
+
+    fireEvent.dblClick(stage);
+    await waitFor(() =>
+      expect(onFullscreenChange).toHaveBeenCalledWith(true),
+    );
+    unmount();
+
+    onFullscreenChange.mockClear();
+    render(
+      <DisplayStage
+        config={DEFAULT_CONFIG}
+        onFullscreenChange={onFullscreenChange}
+      />,
+    );
+    await waitFor(() => expect(syncConfig).toHaveBeenCalled());
+    const stage2 = screen.getByTestId('display-stage');
+    stage2.requestFullscreen = vi.fn().mockRejectedValue(new Error('x'));
+    fireEvent.pointerUp(stage2, { pointerType: 'touch' });
+    fireEvent.pointerUp(stage2, { pointerType: 'touch' });
+    await waitFor(() =>
+      expect(onFullscreenChange).toHaveBeenCalledWith(true),
+    );
+  });
+
   it('clears native fullscreen on fullscreenchange', async () => {
     const onFullscreenChange = vi.fn();
     const ref = createRef<DisplayStageHandle>();
@@ -174,33 +213,6 @@ describe('DisplayStage', () => {
     fireEvent.keyDown(input, { key: 'f' });
     select.remove();
     input.remove();
-  });
-
-  it('ignores pointer exits when idle and mouse while fullscreen', async () => {
-    const onFullscreenChange = vi.fn();
-    const ref = createRef<DisplayStageHandle>();
-    render(
-      <DisplayStage
-        ref={ref}
-        config={DEFAULT_CONFIG}
-        onFullscreenChange={onFullscreenChange}
-      />,
-    );
-    await waitFor(() => expect(syncConfig).toHaveBeenCalled());
-
-    const stage = screen.getByTestId('display-stage');
-    fireEvent.pointerUp(stage, { pointerType: 'touch' });
-    fireEvent.dblClick(stage);
-
-    stage.requestFullscreen = vi.fn().mockRejectedValue(new Error('x'));
-    await ref.current?.toggleFullscreen();
-    await waitFor(() =>
-      expect(stage.className).toMatch(/is-fullscreen-active/),
-    );
-
-    fireEvent.pointerUp(stage, { pointerType: 'mouse' });
-    expect(onFullscreenChange).toHaveBeenCalledTimes(1);
-    expect(onFullscreenChange).toHaveBeenCalledWith(true);
   });
 
   it('handles visibility, empty text, and post-unmount RAF', async () => {

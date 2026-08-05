@@ -8,8 +8,6 @@ type PlaybackControlsProps = {
   onSpeedChange: (speed: number) => void;
   onBrightnessChange: (brightness: number) => void;
   onReset: () => void;
-  onFullscreen: () => void;
-  fullscreenActive: boolean;
 };
 
 export function PlaybackControls({
@@ -20,8 +18,6 @@ export function PlaybackControls({
   onSpeedChange,
   onBrightnessChange,
   onReset,
-  onFullscreen,
-  fullscreenActive,
 }: PlaybackControlsProps) {
   return (
     <div className="panel playback">
@@ -36,14 +32,6 @@ export function PlaybackControls({
         </button>
         <button type="button" className="btn" onClick={onReset}>
           Đặt lại
-        </button>
-        <button
-          type="button"
-          className="btn"
-          data-testid="fullscreen-btn"
-          onClick={onFullscreen}
-        >
-          {fullscreenActive ? 'Thoát toàn màn hình' : 'Toàn màn hình'}
         </button>
       </div>
 

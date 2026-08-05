@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { DisplayStage, type DisplayStageHandle } from './ui/DisplayStage';
 import { TextInput } from './ui/TextInput';
 import { PlaybackControls } from './ui/PlaybackControls';
@@ -10,7 +10,6 @@ import { useDisplayConfig } from './state/useDisplayConfig';
 export default function App() {
   const { config, patch, setText, charCount, maxTextLength } = useDisplayConfig();
   const stageRef = useRef<DisplayStageHandle>(null);
-  const [fullscreenActive, setFullscreenActive] = useState(false);
 
   return (
     <div className="app">
@@ -21,22 +20,16 @@ export default function App() {
         </div>
       </header>
 
-      <DisplayStage
-        ref={stageRef}
-        config={config}
-        onFullscreenChange={setFullscreenActive}
-      />
+      <DisplayStage ref={stageRef} config={config} />
 
       <PlaybackControls
         playing={config.playing}
         speed={config.speed}
         brightness={config.brightness}
-        fullscreenActive={fullscreenActive}
         onTogglePlay={() => patch({ playing: !config.playing })}
         onSpeedChange={(speed) => patch({ speed })}
         onBrightnessChange={(brightness) => patch({ brightness })}
         onReset={() => stageRef.current?.resetAnimation()}
-        onFullscreen={() => void stageRef.current?.toggleFullscreen()}
       />
 
       <div className="controls-grid">
@@ -53,7 +46,8 @@ export default function App() {
       </div>
 
       <p className="hint" aria-live="polite">
-        {charCount}/{maxTextLength} · Phím F: toàn màn hình
+        {charCount}/{maxTextLength} · Double-click / double-tap màn LED: toàn màn
+        hình · Phím F
       </p>
 
       <AppFooter />

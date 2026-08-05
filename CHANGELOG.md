@@ -20,6 +20,7 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Fullscreen chỉ còn gesture: double-click / double-tap trên màn LED để **toggle** (bỏ nút Toàn màn hình)
 - Default config: `fontId: space_mono`, `matrixSizeId: 256x64`, `speed: 4`
 - Font raster supersample (`RASTER_SCALE = 6`) để giảm hiện tượng “dính dấu” / stem chữ M
 - Tài liệu SSOT cập nhật theo font / size / speed / fullscreen

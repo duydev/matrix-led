@@ -64,8 +64,8 @@
 
 | ID | Priority | Requirement |
 |----|----------|-------------|
-| FR-50 | MUST | Nút “Toàn màn hình” = Fullscreen API trên `DisplayStage`. |
-| FR-51 | MUST | Fullscreen: matrix scale contain tối đa; controls ẩn/thu; Esc + nút Exit. |
+| FR-50 | MUST | Double-click (chuột) / double-tap (cảm ứng) trên `DisplayStage` toggle Fullscreen API hoặc pseudo-fallback. Không bắt buộc nút UI riêng. |
+| FR-51 | MUST | Fullscreen: matrix scale contain tối đa; controls ẩn/thu; Esc thoát; double-activate cũng toggle. |
 | FR-52 | MUST | Responsive từ ~320px; không bắt buộc scroll ngang để dùng control chính. |
 | FR-53 | SHOULD | Phím `F` toggle fullscreen (desktop). |
 | FR-54 | MUST | Canvas scale theo container; `devicePixelRatio` clamp ≤ 2. |

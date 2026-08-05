@@ -66,9 +66,9 @@ SHOULD fail **không** chặn MVP trừ khi product owner yêu cầu.
 
 | ID | Priority | Criterion | Pass |
 |----|----------|-----------|------|
-| AC-40 | MUST | “Toàn màn hình” dùng Fullscreen API hoặc pseudo-fallback | ☐ |
+| AC-40 | MUST | Double-click/double-tap màn LED toggle Fullscreen API hoặc pseudo-fallback | ☐ |
 | AC-41 | MUST | Fullscreen: matrix lớn, cells đọc được | ☐ |
-| AC-42 | MUST | Esc và/hoặc nút Thoát hoạt động | ☐ |
+| AC-42 | MUST | Esc và/hoặc double-activate thoát được | ☐ |
 | AC-43 | MUST | Viewport 375×667: controls dùng được, không bắt buộc scroll ngang | ☐ |
 | AC-44 | MUST | Viewport 1280×800: display dominant | ☐ |
 | AC-45 | SHOULD | Đổi orientation không vỡ layout | ☐ |

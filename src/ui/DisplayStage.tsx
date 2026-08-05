@@ -198,27 +198,24 @@ export const DisplayStage = forwardRef<DisplayStageHandle, DisplayStageProps>(
     ]);
 
     const lastTapRef = useRef(0);
-    const exitViaDoubleActivate = useCallback(() => {
-      /* v8 ignore next */
-      if (fsModeRef.current === 'none') return;
+    const toggleViaDoubleActivate = useCallback(() => {
       void toggleFullscreen();
     }, [toggleFullscreen]);
 
     const onStagePointerUp = useCallback(
       (e: ReactPointerEvent) => {
-        if (fsModeRef.current === 'none') return;
         // Mouse uses native dblclick; touch/pen use double-tap.
         /* v8 ignore next — RTL PointerEventInit often omits pointerType */
         if (e.pointerType === 'mouse') return;
         const now = performance.now();
         if (now - lastTapRef.current < 320) {
           lastTapRef.current = 0;
-          exitViaDoubleActivate();
+          toggleViaDoubleActivate();
           return;
         }
         lastTapRef.current = now;
       },
-      [exitViaDoubleActivate],
+      [toggleViaDoubleActivate],
     );
 
     const stageClass = [
@@ -234,7 +231,8 @@ export const DisplayStage = forwardRef<DisplayStageHandle, DisplayStageProps>(
         className={stageClass}
         data-testid="display-stage"
         aria-label="Màn hình Matrix LED"
-        onDoubleClick={exitViaDoubleActivate}
+        title="Double-click hoặc double-tap để toàn màn hình"
+        onDoubleClick={toggleViaDoubleActivate}
         onPointerUp={onStagePointerUp}
       >
         <div className="display-stage__viewport">

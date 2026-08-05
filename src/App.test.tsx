@@ -7,12 +7,12 @@ vi.mock('./ui/DisplayStage', async () => {
   const React = await import('react');
   return {
     DisplayStage: React.forwardRef(function MockStage(
-      props: { onFullscreenChange?: (v: boolean) => void },
+      _props: unknown,
       ref,
     ) {
       React.useImperativeHandle(ref, () => ({
         resetAnimation: vi.fn(),
-        toggleFullscreen: async () => props.onFullscreenChange?.(true),
+        toggleFullscreen: vi.fn(),
       }));
       return <div data-testid="display-stage" />;
     }),
@@ -31,10 +31,8 @@ describe('App', () => {
     expect(screen.getByTestId('app-author-email')).toHaveTextContent(
       'Trần Nhật Duy',
     );
-    await user.click(screen.getByTestId('fullscreen-btn'));
-    expect(screen.getByTestId('fullscreen-btn')).toHaveTextContent(
-      'Thoát toàn màn hình',
-    );
+    expect(screen.queryByTestId('fullscreen-btn')).not.toBeInTheDocument();
+    expect(screen.getByText(/Double-click \/ double-tap/i)).toBeInTheDocument();
     await user.click(screen.getByTestId('play-pause'));
     await user.click(screen.getByText('Đặt lại'));
     await user.selectOptions(screen.getByTestId('effect-select'), 'static');

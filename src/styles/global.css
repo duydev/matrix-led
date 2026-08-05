@@ -299,6 +299,7 @@ select {
 
 .display-stage {
   position: relative;
+  cursor: pointer;
 }
 
 .display-stage__viewport {
@@ -399,7 +400,6 @@ body.is-fs-scroll-lock {
 }
 
 .display-stage.is-fullscreen-active {
-  cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;

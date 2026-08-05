@@ -41,13 +41,10 @@ describe('UI controls', () => {
       onSpeedChange: vi.fn(),
       onBrightnessChange: vi.fn(),
       onReset: vi.fn(),
-      onFullscreen: vi.fn(),
-      fullscreenActive: false,
     };
     const { rerender } = render(<PlaybackControls {...props} />);
     await user.click(screen.getByTestId('play-pause'));
     await user.click(screen.getByText('Đặt lại'));
-    await user.click(screen.getByTestId('fullscreen-btn'));
     fireEvent.change(screen.getByTestId('speed-slider'), {
       target: { value: '2' },
     });
@@ -56,15 +53,11 @@ describe('UI controls', () => {
     });
     expect(props.onTogglePlay).toHaveBeenCalled();
     expect(props.onReset).toHaveBeenCalled();
-    expect(props.onFullscreen).toHaveBeenCalled();
     expect(props.onSpeedChange).toHaveBeenCalledWith(2);
     expect(props.onBrightnessChange).toHaveBeenCalledWith(0.5);
 
-    rerender(<PlaybackControls {...props} playing={false} fullscreenActive />);
+    rerender(<PlaybackControls {...props} playing={false} />);
     expect(screen.getByTestId('play-pause')).toHaveTextContent('Chạy');
-    expect(screen.getByTestId('fullscreen-btn')).toHaveTextContent(
-      'Thoát toàn màn hình',
-    );
   });
 
   it('StyleControls patches presets and fields', async () => {
