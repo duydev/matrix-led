@@ -82,6 +82,10 @@ export class DisplayEngine {
     this.playing = config.playing;
   }
 
+  async reset(config: DisplayConfig): Promise<void> {
+    await this.syncConfig(config, true);
+  }
+
   frame(now: number, config: DisplayConfig): void {
     this.lastNow = now;
     const size = MATRIX_SIZES[config.matrixSizeId];

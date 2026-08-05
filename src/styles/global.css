@@ -183,6 +183,108 @@ select {
   outline-offset: 1px;
 }
 
+.text-input--inline {
+  min-height: 44px;
+  resize: none;
+}
+
+.select {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--panel-border);
+  background: #0d0d10;
+  color: var(--text);
+  padding: 8px 10px;
+}
+
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  min-height: 40px;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--panel-border);
+  background: #1a1a22;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.chip.is-active {
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.color-row {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.color-row input[type='color'] {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--panel-border);
+  background: transparent;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+}
+
+.controls-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.display-stage {
+  position: relative;
+}
+
+.display-stage.is-pseudo-fullscreen,
+.display-stage:fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border-radius: 0;
+  background: #000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.display-stage.is-pseudo-fullscreen .display-stage__bezel,
+.display-stage:fullscreen .display-stage__bezel {
+  width: min(96vw, 1400px);
+  max-height: 80vh;
+}
+
+.display-stage__exit {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+}
+
 @media (min-width: 768px) {
   .app {
     padding: 24px 24px 48px;
@@ -196,5 +298,23 @@ select {
 
   .display-stage__bezel {
     min-height: 150px;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+
+  .controls-grid > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1200px) {
+  .controls-grid {
+    grid-template-columns: 1.1fr 0.7fr 1fr;
+  }
+
+  .controls-grid > :last-child {
+    grid-column: auto;
   }
 }
