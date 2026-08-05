@@ -1,0 +1,35 @@
+name: Bug report
+description: Báo lỗi để tái hiện và sửa
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: describe
+    attributes:
+      label: Mô tả
+      description: Chuyện gì xảy ra?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Các bước tái hiện
+      placeholder: |
+        1. Mở app
+        2. …
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Kỳ vọng
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Môi trường
+      placeholder: "Windows 10 · Chrome 128 · commit hoặc tag"
+    validations:
+      required: false

@@ -2,6 +2,20 @@
   "name": "matrix-led",
   "private": true,
   "version": "0.1.0",
+  "description": "Client-only Matrix LED simulator — text, effects, fonts, and fullscreen demo on Canvas 2D",
+  "license": "MIT",
+  "author": {
+    "name": "Trần Nhật Duy",
+    "email": "duytn.hcm@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duydev/matrix-led.git"
+  },
+  "bugs": {
+    "url": "https://github.com/duydev/matrix-led/issues"
+  },
+  "homepage": "https://github.com/duydev/matrix-led#readme",
   "type": "module",
   "scripts": {
     "dev": "vite",

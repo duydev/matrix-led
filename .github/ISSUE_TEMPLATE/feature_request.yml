@@ -1,0 +1,29 @@
+name: Feature request
+description: Đề xuất tính năng hoặc cải tiến
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Vấn đề / nhu cầu
+      description: User story hoặc pain point
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Đề xuất
+      description: Bạn muốn app làm gì?
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope ước lượng (theo product overview)
+      options:
+        - Trong spirit MVP / simulator client-only
+        - Có thể thuộc Phase 2 / MAY
+        - Chưa chắc — cần maintainer đánh giá
+    validations:
+      required: true
