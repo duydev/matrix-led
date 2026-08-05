@@ -31,12 +31,13 @@ describe('typewriter coverage', () => {
 
     const fx = createTypewriterEffect();
     const buffer = createFrameBuffer(32, 8);
-    fx.init({ t: 0, config: DEFAULT_CONFIG, textBitmap: bitmap, buffer });
+    const config = { ...DEFAULT_CONFIG, speed: 1 };
+    fx.init({ t: 0, config, textBitmap: bitmap, buffer });
     // cursor on (even floor(t/300)) while still revealing
     fx.update({
       t: 50,
       deltaMs: 16,
-      config: DEFAULT_CONFIG,
+      config,
       textBitmap: bitmap,
       buffer,
     });
@@ -44,7 +45,7 @@ describe('typewriter coverage', () => {
     fx.update({
       t: revealMs + 1000 + 50,
       deltaMs: 16,
-      config: DEFAULT_CONFIG,
+      config,
       textBitmap: bitmap,
       buffer,
     });
@@ -53,7 +54,7 @@ describe('typewriter coverage', () => {
     fx.update({
       t: 50,
       deltaMs: 16,
-      config: DEFAULT_CONFIG,
+      config,
       textBitmap: {
         width: 8,
         height: 10,

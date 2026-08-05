@@ -48,14 +48,14 @@ describe('effect phase branches', () => {
     fade.update({
       t: 2900,
       deltaMs: 16,
-      config: DEFAULT_CONFIG,
+      config: { ...DEFAULT_CONFIG, speed: 1 },
       textBitmap: bitmap,
       buffer,
     });
     blink.update({
       t: 600,
       deltaMs: 16,
-      config: DEFAULT_CONFIG,
+      config: { ...DEFAULT_CONFIG, speed: 1 },
       textBitmap: bitmap,
       buffer,
     });

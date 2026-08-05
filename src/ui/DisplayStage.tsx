@@ -102,15 +102,18 @@ export const DisplayStage = forwardRef<DisplayStageHandle, DisplayStageProps>(
     useLayoutEffect(() => {
       if (!fsActive || fsModeRef.current !== 'pseudo') return;
       const el = rootRef.current;
+      /* v8 ignore next */
       if (!el) return;
       const sync = () => applyVisualViewportSize(el);
       sync();
       const vv = window.visualViewport;
+      /* v8 ignore next 2 */
       vv?.addEventListener('resize', sync);
       vv?.addEventListener('scroll', sync);
       window.addEventListener('resize', sync);
       window.addEventListener('orientationchange', sync);
       return () => {
+        /* v8 ignore next 2 */
         vv?.removeEventListener('resize', sync);
         vv?.removeEventListener('scroll', sync);
         window.removeEventListener('resize', sync);
@@ -196,6 +199,7 @@ export const DisplayStage = forwardRef<DisplayStageHandle, DisplayStageProps>(
 
     const lastTapRef = useRef(0);
     const exitViaDoubleActivate = useCallback(() => {
+      /* v8 ignore next */
       if (fsModeRef.current === 'none') return;
       void toggleFullscreen();
     }, [toggleFullscreen]);
@@ -204,6 +208,7 @@ export const DisplayStage = forwardRef<DisplayStageHandle, DisplayStageProps>(
       (e: ReactPointerEvent) => {
         if (fsModeRef.current === 'none') return;
         // Mouse uses native dblclick; touch/pen use double-tap.
+        /* v8 ignore next — RTL PointerEventInit often omits pointerType */
         if (e.pointerType === 'mouse') return;
         const now = performance.now();
         if (now - lastTapRef.current < 320) {

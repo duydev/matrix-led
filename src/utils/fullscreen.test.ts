@@ -67,6 +67,24 @@ describe('fullscreen utils', () => {
     vi.unstubAllGlobals();
   });
 
+  it('detects iPadOS desktop UA via MacIntel + multitouch', () => {
+    vi.stubGlobal('navigator', {
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
+      platform: 'MacIntel',
+      maxTouchPoints: 5,
+    });
+    expect(isAppleTouchDevice()).toBe(true);
+    vi.unstubAllGlobals();
+
+    vi.stubGlobal('navigator', {
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
+      platform: 'MacIntel',
+      maxTouchPoints: 0,
+    });
+    expect(isAppleTouchDevice()).toBe(false);
+    vi.unstubAllGlobals();
+  });
+
   it('sizes via visualViewport', () => {
     const el = document.createElement('div');
     applyVisualViewportSize(el);
@@ -76,6 +94,44 @@ describe('fullscreen utils', () => {
     expect(isPseudoFullscreen(el)).toBe(true);
     clearVisualViewportSize(el);
     expect(el.style.width).toBe('');
+  });
+
+  it('checks prototype support when no element is passed', () => {
+    const expected =
+      typeof HTMLElement !== 'undefined'
+      && typeof HTMLElement.prototype.requestFullscreen === 'function';
+    expect(supportsNativeElementFullscreen()).toBe(expected);
+    expect(supportsNativeElementFullscreen(null)).toBe(expected);
+  });
+
+  it('uses webkit fullscreen when standard API is missing', async () => {
+    const el = document.createElement('div');
+    document.body.appendChild(el);
+    // Drop standard API so the webkit branch is exercised.
+    Object.defineProperty(el, 'requestFullscreen', {
+      configurable: true,
+      value: undefined,
+    });
+    const webkit = el as HTMLElement & {
+      webkitRequestFullscreen?: () => Promise<void>;
+    };
+    webkit.webkitRequestFullscreen = vi.fn().mockImplementation(async () => {
+      Object.defineProperty(document, 'fullscreenElement', {
+        configurable: true,
+        get: () => el,
+      });
+    });
+    await expect(requestDisplayFullscreen(el)).resolves.toBe('native');
+  });
+
+  it('swallows scrollTo failures when unlocking', () => {
+    lockPageScroll();
+    const scrollTo = vi.fn(() => {
+      throw new Error('scroll blocked');
+    });
+    vi.stubGlobal('scrollTo', scrollTo);
+    expect(() => unlockPageScroll()).not.toThrow();
+    vi.unstubAllGlobals();
   });
 
   it('exits native / pseudo and unlocks scroll', async () => {

@@ -9,6 +9,7 @@ và dự án tuân theo [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Footer web app: phiên bản (`package.json`), tác giả Trần Nhật Duy, email, GitHub, MIT
 - Catalog font LED mono self-host (`fontId`): VT323, Share Tech Mono, IBM Plex Mono, Space Mono, Silkscreen, Press Start 2P, Nova Mono
 - Kích thước matrix lớn hơn: `128×32`, `160×32`, `192×48`, `256×64`
 - Phạm vi tốc độ mở rộng: `0.25`–`10` (marquee / typewriter nhanh hơn theo scale)

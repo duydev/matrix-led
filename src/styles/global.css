@@ -253,6 +253,50 @@ select {
   font-size: 0.85rem;
 }
 
+.app-footer {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--panel-border) 80%, transparent);
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-footer__primary,
+.app-footer__secondary {
+  margin: 0;
+}
+
+.app-footer__sep {
+  margin: 0 0.4em;
+  opacity: 0.65;
+}
+
+.app-footer__link {
+  color: color-mix(in srgb, var(--text) 78%, var(--muted));
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.app-footer__link:hover {
+  color: var(--text);
+  border-bottom-color: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.app-footer__link:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.app-footer__secondary {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
 .display-stage {
   position: relative;
 }

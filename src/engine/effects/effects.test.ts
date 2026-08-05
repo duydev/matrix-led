@@ -40,6 +40,8 @@ describe('fadeMultiplier', () => {
   it('fades in then out within a cycle', () => {
     expect(fadeMultiplier(0, 1)).toBeCloseTo(0, 1);
     expect(fadeMultiplier(750, 1)).toBeGreaterThan(0.9);
+    expect(fadeMultiplier(2100, 1)).toBeGreaterThan(0);
+    expect(fadeMultiplier(2100, 1)).toBeLessThan(1);
     expect(fadeMultiplier(2700, 1)).toBeLessThan(0.5);
     expect(fadeMultiplier(2900, 1)).toBe(0);
   });
@@ -85,7 +87,7 @@ describe('blink effect', () => {
     effect.update({
       t: 600,
       deltaMs: 16,
-      config: DEFAULT_CONFIG,
+      config: { ...DEFAULT_CONFIG, speed: 1 },
       textBitmap,
       buffer,
     });

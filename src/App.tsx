@@ -4,6 +4,7 @@ import { TextInput } from './ui/TextInput';
 import { PlaybackControls } from './ui/PlaybackControls';
 import { EffectSelect } from './ui/EffectSelect';
 import { StyleControls } from './ui/StyleControls';
+import { AppFooter } from './ui/AppFooter';
 import { useDisplayConfig } from './state/useDisplayConfig';
 
 export default function App() {
@@ -62,6 +63,8 @@ export default function App() {
       <p className="hint" aria-live="polite">
         {charCount}/{maxTextLength} · Phím F: toàn màn hình
       </p>
+
+      <AppFooter />
     </div>
   );
 }

@@ -26,6 +26,11 @@ describe('App', () => {
     render(<App />);
     expect(screen.getByText('Matrix LED')).toBeInTheDocument();
     expect(screen.getByText('Giả lập bảng chạy chữ')).toBeInTheDocument();
+    expect(screen.getByTestId('app-footer')).toBeInTheDocument();
+    expect(screen.getByTestId('app-version')).toHaveTextContent(/^v/);
+    expect(screen.getByTestId('app-author-email')).toHaveTextContent(
+      'Trần Nhật Duy',
+    );
     await user.click(screen.getByTestId('fullscreen-btn-header'));
     expect(screen.getByTestId('fullscreen-btn-header')).toHaveTextContent(
       'Thoát toàn màn hình',

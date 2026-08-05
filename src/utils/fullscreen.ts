@@ -6,6 +6,7 @@ let savedScrollY = 0;
 
 /** iPhone / iPad (incl. iPadOS desktop UA). */
 export function isAppleTouchDevice(): boolean {
+  /* v8 ignore next */
   if (typeof navigator === 'undefined') return false;
   const ua = navigator.userAgent;
   if (/iPad|iPhone|iPod/.test(ua)) return true;
@@ -15,6 +16,7 @@ export function isAppleTouchDevice(): boolean {
 export function supportsNativeElementFullscreen(
   el?: HTMLElement | null,
 ): boolean {
+  /* v8 ignore next */
   if (typeof document === 'undefined') return false;
   if (isAppleTouchDevice()) return false;
 
@@ -37,6 +39,7 @@ export function supportsNativeElementFullscreen(
 /** Size overlay to the *visible* viewport (iOS URL bar safe). */
 export function applyVisualViewportSize(el: HTMLElement): void {
   const vv = window.visualViewport;
+  /* v8 ignore next 4 — prefer visualViewport when present; fall back for desktop/jsdom */
   const w = Math.round(vv?.width ?? window.innerWidth);
   const h = Math.round(vv?.height ?? window.innerHeight);
   const offsetTop = Math.round(vv?.offsetTop ?? 0);

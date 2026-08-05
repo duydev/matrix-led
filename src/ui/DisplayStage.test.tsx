@@ -101,6 +101,33 @@ describe('DisplayStage', () => {
       ),
     );
 
+    fireEvent.keyDown(window, { key: 'Escape' });
+    await waitFor(() =>
+      expect(onFullscreenChange).toHaveBeenCalledWith(false),
+    );
+  });
+
+  it('exits pseudo fullscreen on double-tap', async () => {
+    const onFullscreenChange = vi.fn();
+    const ref = createRef<DisplayStageHandle>();
+    render(
+      <DisplayStage
+        ref={ref}
+        config={DEFAULT_CONFIG}
+        onFullscreenChange={onFullscreenChange}
+      />,
+    );
+    await waitFor(() => expect(syncConfig).toHaveBeenCalled());
+
+    const el = screen.getByTestId('display-stage');
+    el.requestFullscreen = vi.fn().mockRejectedValue(new Error('x'));
+    await ref.current?.toggleFullscreen();
+    await waitFor(() =>
+      expect(screen.getByTestId('display-stage').className).toMatch(
+        /is-fullscreen-active/,
+      ),
+    );
+
     fireEvent.pointerUp(screen.getByTestId('display-stage'), {
       pointerType: 'touch',
     });
@@ -147,6 +174,33 @@ describe('DisplayStage', () => {
     fireEvent.keyDown(input, { key: 'f' });
     select.remove();
     input.remove();
+  });
+
+  it('ignores pointer exits when idle and mouse while fullscreen', async () => {
+    const onFullscreenChange = vi.fn();
+    const ref = createRef<DisplayStageHandle>();
+    render(
+      <DisplayStage
+        ref={ref}
+        config={DEFAULT_CONFIG}
+        onFullscreenChange={onFullscreenChange}
+      />,
+    );
+    await waitFor(() => expect(syncConfig).toHaveBeenCalled());
+
+    const stage = screen.getByTestId('display-stage');
+    fireEvent.pointerUp(stage, { pointerType: 'touch' });
+    fireEvent.dblClick(stage);
+
+    stage.requestFullscreen = vi.fn().mockRejectedValue(new Error('x'));
+    await ref.current?.toggleFullscreen();
+    await waitFor(() =>
+      expect(stage.className).toMatch(/is-fullscreen-active/),
+    );
+
+    fireEvent.pointerUp(stage, { pointerType: 'mouse' });
+    expect(onFullscreenChange).toHaveBeenCalledTimes(1);
+    expect(onFullscreenChange).toHaveBeenCalledWith(true);
   });
 
   it('handles visibility, empty text, and post-unmount RAF', async () => {
