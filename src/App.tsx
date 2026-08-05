@@ -1,9 +1,10 @@
 import { DisplayStage } from './ui/DisplayStage';
 import { TextInput } from './ui/TextInput';
+import { PlaybackControls } from './ui/PlaybackControls';
 import { useDisplayConfig } from './state/useDisplayConfig';
 
 export default function App() {
-  const { config, setText, charCount, maxTextLength } = useDisplayConfig();
+  const { config, patch, setText, charCount, maxTextLength } = useDisplayConfig();
 
   return (
     <div className="app">
@@ -17,7 +18,16 @@ export default function App() {
         </span>
       </header>
 
-      <DisplayStage text={config.text} />
+      <DisplayStage config={config} />
+
+      <PlaybackControls
+        playing={config.playing}
+        speed={config.speed}
+        brightness={config.brightness}
+        onTogglePlay={() => patch({ playing: !config.playing })}
+        onSpeedChange={(speed) => patch({ speed })}
+        onBrightnessChange={(brightness) => patch({ brightness })}
+      />
 
       <TextInput
         value={config.text}

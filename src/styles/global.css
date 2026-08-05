@@ -89,9 +89,16 @@ select {
   border: 2px solid #2e2e36;
   border-radius: 6px;
   min-height: 120px;
-  display: grid;
-  place-items: center;
+  display: block;
+  overflow: hidden;
   box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.65);
+  aspect-ratio: 64 / 16;
+}
+
+.display-stage__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .display-stage__placeholder {
@@ -101,6 +108,36 @@ select {
   letter-spacing: 0.08em;
   text-align: center;
   padding: 16px;
+}
+
+.btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--panel-border);
+  background: #22222a;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--panel-border));
+}
+
+.btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+  outline-offset: 2px;
+}
+
+.playback__row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.playback input[type='range'] {
+  width: 100%;
 }
 
 .panel {
