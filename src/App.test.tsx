@@ -31,13 +31,12 @@ describe('App', () => {
     expect(screen.getByTestId('app-author-email')).toHaveTextContent(
       'Trần Nhật Duy',
     );
-    await user.click(screen.getByTestId('fullscreen-btn-header'));
-    expect(screen.getByTestId('fullscreen-btn-header')).toHaveTextContent(
+    await user.click(screen.getByTestId('fullscreen-btn'));
+    expect(screen.getByTestId('fullscreen-btn')).toHaveTextContent(
       'Thoát toàn màn hình',
     );
     await user.click(screen.getByTestId('play-pause'));
     await user.click(screen.getByText('Đặt lại'));
-    await user.click(screen.getByTestId('fullscreen-btn'));
     await user.selectOptions(screen.getByTestId('effect-select'), 'static');
     expect(screen.getByTestId('effect-select')).toHaveValue('static');
 

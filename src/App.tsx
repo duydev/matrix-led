@@ -19,14 +19,6 @@ export default function App() {
           <h1 className="app__title">Matrix LED</h1>
           <p className="app__subtitle">Giả lập bảng chạy chữ</p>
         </div>
-        <button
-          type="button"
-          className="btn"
-          data-testid="fullscreen-btn-header"
-          onClick={() => void stageRef.current?.toggleFullscreen()}
-        >
-          {fullscreenActive ? 'Thoát toàn màn hình' : 'Toàn màn hình'}
-        </button>
       </header>
 
       <DisplayStage
